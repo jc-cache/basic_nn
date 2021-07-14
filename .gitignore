@@ -1,0 +1,4 @@
+
+*.pyc
+.ipynb_checkpoints/1d_nn-checkpoint.ipynb
+.ipynb_checkpoints/2d_nn-checkpoint.ipynb
