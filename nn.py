@@ -36,6 +36,8 @@ class ANN:
         relu = 3 
         relu_limited = 4
         mexican_hat = 5
+        ceil = 6
+        step = 7
 
     def __init__(self, units_per_layer, activation=Activation_type.sigmoid):
         """
@@ -90,6 +92,10 @@ class ANN:
         elif type is self.Activation_type.mexican_hat:
             z_div_a_squared = np.power(z/self.__mex_hat_sig, 2)
             return self.__mex_hat_A * (1 - z_div_a_squared) * np.exp(-0.5*z_div_a_squared)
+        elif type is self.Activation_type.ceil:
+            return np.ceil(z)
+        elif type is self.Activation_type.step:
+            return np.maximum(np.minimum(np.ceil(z), 1), 0)
 
     def predict(self, X):
         """
