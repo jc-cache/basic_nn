@@ -39,7 +39,7 @@ class ANN:
         ceil = 6
         step = 7
 
-    def __init__(self, units_per_layer, activation=Activation_type.sigmoid):
+    def __init__(self, units_per_layer, activations):
         """
         Populates model's parameters.
 
@@ -47,12 +47,13 @@ class ANN:
         ----------
         units_per_layer : int list
             The list of the number of units in each layer, from inputs to outputs
-        activation : Activation_type
-            Activation type of the hidden layers
+        activation : Activation_type list
+            Activations of the hidden/output layers
         """
         self.units_per_layer = units_per_layer
         self.num_layers = len(units_per_layer) - 1 # input units are discounted
-        self.activation = activation
+        self.activations = activations
+        assert(len(self.activations) == self.num_layers)
         # pre-computation for mexican hat activation
         self.__mex_hat_sig = 1
         self.__mex_hat_A = 2/(np.sqrt(3*self.__mex_hat_sig)*np.power(np.pi,0.25))
@@ -117,14 +118,10 @@ class ANN:
         assert(len(X) == self.units_per_layer[0])
         
         current_X = X
-        last_layer_index = self.num_layers - 1
-        activation = self.activation
         for layer_index in range(self.num_layers):
             W = self.Ws[layer_index]
             b = self.Bs[layer_index]
-            # last layer activation is fixed: sigmoid
-            if layer_index == last_layer_index:
-                activation = ANN.Activation_type.sigmoid
+            activation = self.activations[layer_index]
             # calculate activation of a layer's units
             z = np.dot(W, current_X) + b
             current_X = self.__activation(z, activation)
